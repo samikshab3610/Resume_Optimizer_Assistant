@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Optimizer - Analysis Results</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-file-alt"></i>
+                <span>Resume Optimizer</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="features.html" class="nav-link">Features</a></li>
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="login.html" class="nav-link login-btn">Login/Signup</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main style="margin-top: 70px; min-height: 90vh; padding: 2rem;">
+        <div class="result-container">
+            <div class="result-header">
+                <h1><i class="fas fa-chart-line"></i> Resume Analysis Results</h1>
+                <p>Here's how your resume performs against the job description</p>
+                
+                <div class="ats-score-display">
+                    <div class="score-circle-large">
+                        <div class="ats-score" id="atsScore">85</div>
+                        <div class="score-label">ATS Score</div>
+                    </div>
+                    <div class="score-interpretation" id="scoreInterpretation">
+                        <h3>Good Match!</h3>
+                        <p>Your resume shows strong alignment with the job requirements.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-grid">
+                <div class="result-section">
+                    <h3><i class="fas fa-key"></i> Missing Keywords</h3>
+                    <p>Important keywords from the job description that should be added to your resume:</p>
+                    <div class="keyword-list" id="missingKeywords">
+                        <span class="keyword-tag missing">Python</span>
+                        <span class="keyword-tag missing">Machine Learning</span>
+                        <span class="keyword-tag missing">AWS</span>
+                        <span class="keyword-tag missing">Agile</span>
+                        <span class="keyword-tag missing">Docker</span>
+                        <span class="keyword-tag missing">CI/CD</span>
+                    </div>
+                </div>
+
+                <div class="result-section">
+                    <h3><i class="fas fa-check-circle"></i> Matched Keywords</h3>
+                    <p>Keywords from the job description that are already in your resume:</p>
+                    <div class="keyword-list" id="matchedKeywords">
+                        <span class="keyword-tag matched">JavaScript</span>
+                        <span class="keyword-tag matched">React</span>
+                        <span class="keyword-tag matched">Node.js</span>
+                        <span class="keyword-tag matched">Git</span>
+                        <span class="keyword-tag matched">SQL</span>
+                        <span class="keyword-tag matched">API</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analysis-details">
+                <div class="detail-section">
+                    <h3><i class="fas fa-lightbulb"></i> Optimization Suggestions</h3>
+                    <div class="suggestions-list" id="suggestionsList">
+                        <div class="suggestion-item">
+                            <div class="suggestion-icon">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <div class="suggestion-content">
+                                <h4>Add Technical Skills</h4>
+                                <p>Include Python, Machine Learning, and AWS in your skills section to match job requirements.</p>
+                            </div>
+                        </div>
+                        <div class="suggestion-item">
+                            <div class="suggestion-icon">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="suggestion-content">
+                                <h4>Enhance Experience Descriptions</h4>
+                                <p>Incorporate Agile methodology and CI/CD pipeline experience in your work history.</p>
+                            </div>
+                        </div>
+                        <div class="suggestion-item">
+                            <div class="suggestion-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div class="suggestion-content">
+                                <h4>Quantify Achievements</h4>
+                                <p>Add specific metrics and numbers to demonstrate the impact of your work.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3><i class="fas fa-file-alt"></i> Resume & Job Details</h3>
+                    <div class="details-grid">
+                        <div class="detail-card">
+                            <h4><i class="fas fa-briefcase"></i> Job Information</h4>
+                            <div class="detail-item">
+                                <strong>Position:</strong>
+                                <span id="jobTitle">Software Engineer</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Company:</strong>
+                                <span id="companyName">Tech Corp</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Analysis Date:</strong>
+                                <span id="analysisDate">January 15, 2025</span>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-card">
+                            <h4><i class="fas fa-file"></i> Resume Information</h4>
+                            <div class="detail-item">
+                                <strong>File Name:</strong>
+                                <span id="resumeFileName">john_doe_resume.pdf</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Keywords Found:</strong>
+                                <span id="keywordsFound">6 of 12</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>Match Rate:</strong>
+                                <span id="matchRate">50%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="score-breakdown">
+                <h3><i class="fas fa-analytics"></i> Score Breakdown</h3>
+                <div class="breakdown-grid">
+                    <div class="breakdown-item">
+                        <div class="breakdown-header">
+                            <i class="fas fa-key"></i>
+                            <span>Keywords Match</span>
+                        </div>
+                        <div class="breakdown-score">
+                            <div class="score-bar">
+                                <div class="score-fill" style="width: 50%"></div>
+                            </div>
+                            <span class="score-text">50%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="breakdown-item">
+                        <div class="breakdown-header">
+                            <i class="fas fa-align-left"></i>
+                            <span>Format Quality</span>
+                        </div>
+                        <div class="breakdown-score">
+                            <div class="score-bar">
+                                <div class="score-fill" style="width: 95%"></div>
+                            </div>
+                            <span class="score-text">95%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="breakdown-item">
+                        <div class="breakdown-header">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Skills Relevance</span>
+                        </div>
+                        <div class="breakdown-score">
+                            <div class="score-bar">
+                                <div class="score-fill" style="width: 75%"></div>
+                            </div>
+                            <span class="score-text">75%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="breakdown-item">
+                        <div class="breakdown-header">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Experience Match</span>
+                        </div>
+                        <div class="breakdown-score">
+                            <div class="score-bar">
+                                <div class="score-fill" style="width: 80%"></div>
+                            </div>
+                            <span class="score-text">80%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="btn btn-primary" onclick="saveToHistory()">
+                    <i class="fas fa-save"></i> Save to Dashboard
+                </button>
+                <button class="btn btn-secondary" onclick="downloadReport()">
+                    <i class="fas fa-download"></i> Download Report
+                </button>
+                <a href="upload.html" class="btn btn-outline">
+                    <i class="fas fa-upload"></i> Analyze Another Resume
+                </a>
+                <a href="dashboard.html" class="btn btn-outline">
+                    <i class="fas fa-tachometer-alt"></i> View Dashboard
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Resume Optimizer</span>
+                </div>
+                <p>Helping job seekers optimize their resumes for better opportunities.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="features.html">Features</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Tools</h3>
+                <ul>
+                    <li><a href="upload.html">Resume Optimizer</a></li>
+                    <li><a href="quiz.html">Skills Quiz</a></li>
+                    <li><a href="result.html">Results</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Account</h3>
+                <ul>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="signup.html">Sign Up</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Resume Optimizer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <style>
+        .result-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .result-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-header > p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .ats-score-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .score-circle-large {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .ats-score {
+            font-size: 4rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .score-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .score-interpretation {
+            text-align: left;
+        }
+
+        .score-interpretation h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .score-interpretation p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .result-section {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .result-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-section h3 i {
+            color: var(--primary-color);
+        }
+
+        .result-section > p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .keyword-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .keyword-tag {
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .keyword-tag.missing {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error-color);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .keyword-tag.matched {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .analysis-details {
+            margin-bottom: 3rem;
+        }
+
+        .detail-section {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .detail-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-section h3 i {
+            color: var(--primary-color);
+        }
+
+        .suggestions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .suggestion-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .suggestion-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .suggestion-icon i {
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .suggestion-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .suggestion-content p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .detail-card {
+            background: var(--bg-tertiary);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .detail-card h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .detail-card h4 i {
+            color: var(--primary-color);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .detail-item strong {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .detail-item span {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .score-breakdown {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .score-breakdown h3 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .score-breakdown h3 i {
+            color: var(--primary-color);
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .breakdown-item {
+            background: var(--bg-tertiary);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .breakdown-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .breakdown-header i {
+            color: var(--primary-color);
+        }
+
+        .breakdown-header span {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .breakdown-score {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .score-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .score-text {
+            color: var(--text-primary);
+            font-weight: 600;
+            min-width: 40px;
+        }
+
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .ats-score-display {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .score-interpretation {
+                text-align: center;
+            }
+            
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .breakdown-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+            }
+            
+            .result-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <script>
+        // Load analysis data from localStorage or use demo data
+        function loadAnalysisData() {
+            const analysisData = localStorage.getItem('currentAnalysis');
+            
+            if (analysisData) {
+                const data = JSON.parse(analysisData);
+                
+                // Update job information
+                document.getElementById('jobTitle').textContent = data.jobTitle || 'Software Engineer';
+                document.getElementById('companyName').textContent = data.company || 'Tech Corp';
+                document.getElementById('analysisDate').textContent = new Date(data.timestamp).toLocaleDateString();
+                document.getElementById('resumeFileName').textContent = data.fileName || 'resume.pdf';
+                
+                // Generate dynamic analysis based on job description
+                generateAnalysis(data);
+            } else {
+                // Use demo data
+                loadDemoData();
+            }
+        }
+
+        function generateAnalysis(data) {
+            // Simple keyword extraction and analysis
+            const jobDescription = data.jobDescription.toLowerCase();
+            const resumeText = data.resumeText.toLowerCase();
+            
+            // Common tech keywords to look for
+            const techKeywords = [
+                'python', 'javascript', 'react', 'node.js', 'aws', 'docker', 
+                'kubernetes', 'git', 'sql', 'mongodb', 'api', 'rest', 
+                'agile', 'scrum', 'ci/cd', 'machine learning', 'ai', 'html', 
+                'css', 'typescript', 'vue', 'angular', 'express', 'django'
+            ];
+            
+            const jobKeywords = techKeywords.filter(keyword => 
+                jobDescription.includes(keyword)
+            );
+            
+            const resumeKeywords = techKeywords.filter(keyword => 
+                resumeText.includes(keyword)
+            );
+            
+            const matchedKeywords = jobKeywords.filter(keyword => 
+                resumeKeywords.includes(keyword)
+            );
+            
+            const missingKeywords = jobKeywords.filter(keyword => 
+                !resumeKeywords.includes(keyword)
+            );
+            
+            // Calculate score
+            const keywordScore = jobKeywords.length > 0 ? 
+                Math.round((matchedKeywords.length / jobKeywords.length) * 100) : 85;
+            
+            const finalScore = Math.min(Math.max(keywordScore + Math.floor(Math.random() * 20) - 10, 60), 95);
+            
+            // Update UI
+            updateAnalysisResults(finalScore, matchedKeywords, missingKeywords, jobKeywords.length);
+        }
+
+        function updateAnalysisResults(score, matched, missing, totalKeywords) {
+            // Update ATS score
+            document.getElementById('atsScore').textContent = score;
+            
+            // Update score interpretation
+            const interpretation = document.getElementById('scoreInterpretation');
+            let message, description;
+            
+            if (score >= 90) {
+                message = "Excellent Match!";
+                description = "Your resume is highly optimized for this position.";
+            } else if (score >= 80) {
+                message = "Good Match!";
+                description = "Your resume shows strong alignment with the job requirements.";
+            } else if (score >= 70) {
+                message = "Fair Match";
+                description = "Your resume has potential but needs some optimization.";
+            } else {
+                message = "Needs Improvement";
+                description = "Consider adding more relevant keywords and skills.";
+            }
+            
+            interpretation.innerHTML = `<h3>${message}</h3><p>${description}</p>`;
+            
+            // Update keywords
+            const matchedContainer = document.getElementById('matchedKeywords');
+            const missingContainer = document.getElementById('missingKeywords');
+            
+            matchedContainer.innerHTML = matched.map(keyword => 
+                `<span class="keyword-tag matched">${keyword}</span>`
+            ).join('');
+            
+            missingContainer.innerHTML = missing.map(keyword => 
+                `<span class="keyword-tag missing">${keyword}</span>`
+            ).join('');
+            
+            // Update stats
+            document.getElementById('keywordsFound').textContent = `${matched.length} of ${totalKeywords}`;
+            document.getElementById('matchRate').textContent = `${Math.round((matched.length / totalKeywords) * 100)}%`;
+            
+            // Update score bars
+            const keywordMatchRate = Math.round((matched.length / totalKeywords) * 100);
+            document.querySelector('.breakdown-item:nth-child(1) .score-fill').style.width = keywordMatchRate + '%';
+            document.querySelector('.breakdown-item:nth-child(1) .score-text').textContent = keywordMatchRate + '%';
+        }
+
+        function loadDemoData() {
+            // Demo data is already in the HTML, so we just need to animate the score
+            animateScore();
+        }
+
+        function animateScore() {
+            const scoreElement = document.getElementById('atsScore');
+            const targetScore = parseInt(scoreElement.textContent);
+            let currentScore = 0;
+            
+            const increment = targetScore / 50;
+            const timer = setInterval(() => {
+                currentScore += increment;
+                if (currentScore >= targetScore) {
+                    currentScore = targetScore;
+                    clearInterval(timer);
+                }
+                scoreElement.textContent = Math.round(currentScore);
+            }, 30);
+        }
+
+        function saveToHistory() {
+            // Get current analysis data
+            const analysisData = {
+                id: Date.now(),
+                jobTitle: document.getElementById('jobTitle').textContent,
+                company: document.getElementById('companyName').textContent,
+                atsScore: document.getElementById('atsScore').textContent,
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString(),
+                matchedKeywords: Array.from(document.querySelectorAll('.keyword-tag.matched')).map(el => el.textContent),
+                missingKeywords: Array.from(document.querySelectorAll('.keyword-tag.missing')).map(el => el.textContent)
+            };
+            
+            // Get existing history
+            let resumeHistory = JSON.parse(localStorage.getItem('resumeHistory') || '[]');
+            
+            // Add current analysis
+            resumeHistory.push(analysisData);
+            
+            // Save to localStorage
+            localStorage.setItem('resumeHistory', JSON.stringify(resumeHistory));
+            
+            alert('Results saved to your dashboard!');
+        }
+
+        function downloadReport() {
+            // Create a simple text report
+            const jobTitle = document.getElementById('jobTitle').textContent;
+            const company = document.getElementById('companyName').textContent;
+            const score = document.getElementById('atsScore').textContent;
+            const date = document.getElementById('analysisDate').textContent;
+            
+            const matched = Array.from(document.querySelectorAll('.keyword-tag.matched')).map(el => el.textContent);
+            const missing = Array.from(document.querySelectorAll('.keyword-tag.missing')).map(el => el.textContent);
+            
+            const report = `
+RESUME ANALYSIS REPORT
+=====================
+
+Job Position: ${jobTitle}
+Company: ${company}
+Analysis Date: ${date}
+ATS Score: ${score}%
+
+MATCHED KEYWORDS:
+${matched.join(', ')}
+
+MISSING KEYWORDS:
+${missing.join(', ')}
+
+RECOMMENDATIONS:
+- Add missing keywords to your resume
+- Incorporate relevant skills and technologies
+- Quantify your achievements with specific metrics
+- Ensure your resume format is ATS-friendly
+
+Generated by Resume Optimizer
+            `.trim();
+            
+            // Create and download file
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `resume_analysis_${jobTitle.replace(/\s+/g, '_').toLowerCase()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAnalysisData();
+        });
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,425 @@
+// Global JavaScript functionality for Resume Optimizer
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Mobile navigation toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
+    }
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Add scroll effect to navbar
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(15, 23, 42, 0.98)';
+                navbar.style.backdropFilter = 'blur(20px)';
+            } else {
+                navbar.style.background = 'rgba(15, 23, 42, 0.95)';
+                navbar.style.backdropFilter = 'blur(10px)';
+            }
+        });
+    }
+
+    // Animate elements on scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in-up');
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements for animation
+    document.querySelectorAll('.feature-card, .dashboard-card, .step, .value-card, .team-member').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Form validation helpers
+    window.validateEmail = function(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    };
+
+    window.validatePassword = function(password) {
+        // At least 8 characters, 1 uppercase, 1 lowercase, 1 number
+        const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
+        return re.test(password);
+    };
+
+    // Local storage helpers
+    window.saveToLocalStorage = function(key, data) {
+        try {
+            localStorage.setItem(key, JSON.stringify(data));
+            return true;
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+            return false;
+        }
+    };
+
+    window.getFromLocalStorage = function(key) {
+        try {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : null;
+        } catch (error) {
+            console.error('Error reading from localStorage:', error);
+            return null;
+        }
+    };
+
+    // Utility function to format dates
+    window.formatDate = function(date) {
+        return new Date(date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
+
+    // Utility function to format time
+    window.formatTime = function(date) {
+        return new Date(date).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    // Show loading state
+    window.showLoading = function(element, text = 'Loading...') {
+        if (element) {
+            element.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <span>${text}</span>
+                </div>
+            `;
+            element.disabled = true;
+        }
+    };
+
+    // Hide loading state
+    window.hideLoading = function(element, originalText) {
+        if (element) {
+            element.innerHTML = originalText;
+            element.disabled = false;
+        }
+    };
+
+    // Show notification
+    window.showNotification = function(message, type = 'info', duration = 5000) {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+                <button class="notification-close" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+
+        // Add notification styles if not already present
+        if (!document.querySelector('#notification-styles')) {
+            const styles = document.createElement('style');
+            styles.id = 'notification-styles';
+            styles.textContent = `
+                .notification {
+                    position: fixed;
+                    top: 90px;
+                    right: 20px;
+                    z-index: 10000;
+                    max-width: 400px;
+                    border-radius: 0.5rem;
+                    box-shadow: var(--shadow-lg);
+                    animation: slideInRight 0.3s ease-out;
+                }
+                
+                .notification-success {
+                    background: var(--success-color);
+                    color: white;
+                }
+                
+                .notification-error {
+                    background: var(--error-color);
+                    color: white;
+                }
+                
+                .notification-info {
+                    background: var(--primary-color);
+                    color: white;
+                }
+                
+                .notification-content {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    padding: 1rem;
+                }
+                
+                .notification-close {
+                    background: none;
+                    border: none;
+                    color: inherit;
+                    cursor: pointer;
+                    margin-left: auto;
+                    padding: 0.25rem;
+                    border-radius: 0.25rem;
+                    opacity: 0.8;
+                }
+                
+                .notification-close:hover {
+                    opacity: 1;
+                    background: rgba(255, 255, 255, 0.1);
+                }
+                
+                @keyframes slideInRight {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(styles);
+        }
+
+        document.body.appendChild(notification);
+
+        // Auto remove after duration
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, duration);
+    };
+
+    // Debounce function for search/input optimization
+    window.debounce = function(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    };
+
+    // Copy to clipboard function
+    window.copyToClipboard = function(text) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Copied to clipboard!', 'success', 2000);
+            }).catch(() => {
+                fallbackCopyToClipboard(text);
+            });
+        } else {
+            fallbackCopyToClipboard(text);
+        }
+    };
+
+    function fallbackCopyToClipboard(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            document.execCommand('copy');
+            showNotification('Copied to clipboard!', 'success', 2000);
+        } catch (err) {
+            showNotification('Failed to copy to clipboard', 'error', 3000);
+        }
+        
+        document.body.removeChild(textArea);
+    }
+
+    // Initialize tooltips (if needed)
+    document.querySelectorAll('[data-tooltip]').forEach(element => {
+        element.addEventListener('mouseenter', function() {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.textContent = this.getAttribute('data-tooltip');
+            document.body.appendChild(tooltip);
+            
+            const rect = this.getBoundingClientRect();
+            tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+            tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+        });
+        
+        element.addEventListener('mouseleave', function() {
+            const tooltip = document.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.remove();
+            }
+        });
+    });
+
+    // Add tooltip styles if tooltips are used
+    if (document.querySelector('[data-tooltip]')) {
+        const tooltipStyles = document.createElement('style');
+        tooltipStyles.textContent = `
+            .tooltip {
+                position: absolute;
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                padding: 0.5rem 0.75rem;
+                border-radius: 0.25rem;
+                font-size: 0.8rem;
+                z-index: 10000;
+                pointer-events: none;
+                border: 1px solid var(--border-color);
+                box-shadow: var(--shadow-md);
+            }
+        `;
+        document.head.appendChild(tooltipStyles);
+    }
+
+    // Check for user authentication status (mock implementation)
+    window.isAuthenticated = function() {
+        return localStorage.getItem('userToken') !== null;
+    };
+
+    // Mock login function
+    window.mockLogin = function(email, password) {
+        // This is a mock implementation - in a real app, you'd validate against a server
+        if (email && password) {
+            const userData = {
+                email: email,
+                name: email.split('@')[0],
+                loginTime: new Date().toISOString()
+            };
+            localStorage.setItem('userToken', 'mock-token-' + Date.now());
+            localStorage.setItem('userData', JSON.stringify(userData));
+            return true;
+        }
+        return false;
+    };
+
+    // Mock logout function
+    window.mockLogout = function() {
+        localStorage.removeItem('userToken');
+        localStorage.removeItem('userData');
+        window.location.href = 'index.html';
+    };
+
+    // Update navigation based on auth status
+    function updateNavigation() {
+        const loginBtn = document.querySelector('.login-btn');
+        if (loginBtn && isAuthenticated()) {
+            const userData = getFromLocalStorage('userData');
+            if (userData) {
+                loginBtn.innerHTML = `<i class="fas fa-user"></i> ${userData.name}`;
+                loginBtn.href = 'dashboard.html';
+            }
+        }
+    }
+
+    // Initialize navigation
+    updateNavigation();
+
+    // Add keyboard navigation support
+    document.addEventListener('keydown', function(e) {
+        // ESC key to close modals/menus
+        if (e.key === 'Escape') {
+            // Close mobile menu
+            if (navMenu && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+            
+            // Close any open modals
+            document.querySelectorAll('.modal.active').forEach(modal => {
+                modal.classList.remove('active');
+            });
+        }
+    });
+
+    // Performance optimization: Lazy load images
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy');
+                    observer.unobserve(img);
+                }
+            });
+        });
+
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+
+    console.log('Resume Optimizer initialized successfully!');
+});
+
+// Export functions for use in other scripts
+window.ResumeOptimizer = {
+    validateEmail: window.validateEmail,
+    validatePassword: window.validatePassword,
+    saveToLocalStorage: window.saveToLocalStorage,
+    getFromLocalStorage: window.getFromLocalStorage,
+    formatDate: window.formatDate,
+    formatTime: window.formatTime,
+    showLoading: window.showLoading,
+    hideLoading: window.hideLoading,
+    showNotification: window.showNotification,
+    debounce: window.debounce,
+    copyToClipboard: window.copyToClipboard,
+    isAuthenticated: window.isAuthenticated,
+    mockLogin: window.mockLogin,
+    mockLogout: window.mockLogout
+};

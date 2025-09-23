@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Optimizer - Skills Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-file-alt"></i>
+                <span>Resume Optimizer</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="features.html" class="nav-link">Features</a></li>
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="login.html" class="nav-link login-btn">Login/Signup</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main style="margin-top: 70px; min-height: 90vh; padding: 2rem;">
+        <div class="quiz-container">
+            <!-- Quiz Start Screen -->
+            <div id="quizStart" class="quiz-start">
+                <div class="quiz-header">
+                    <h1><i class="fas fa-brain"></i> Skills Assessment Quiz</h1>
+                    <p>Test your knowledge and identify areas for improvement in your resume</p>
+                </div>
+                
+                <div class="quiz-info">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <i class="fas fa-clock"></i>
+                            <h3>Duration</h3>
+                            <p>10-15 minutes</p>
+                        </div>
+                        <div class="info-card">
+                            <i class="fas fa-question-circle"></i>
+                            <h3>Questions</h3>
+                            <p>10 multiple choice</p>
+                        </div>
+                        <div class="info-card">
+                            <i class="fas fa-chart-bar"></i>
+                            <h3>Scoring</h3>
+                            <p>Instant results</p>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-categories">
+                        <h3>Topics Covered:</h3>
+                        <div class="category-tags">
+                            <span class="category-tag">Resume Writing</span>
+                            <span class="category-tag">ATS Optimization</span>
+                            <span class="category-tag">Keywords</span>
+                            <span class="category-tag">Formatting</span>
+                            <span class="category-tag">Job Search</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-large" onclick="startQuiz()">
+                        <i class="fas fa-play"></i>
+                        Start Quiz
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Questions -->
+            <div id="quizQuestions" class="quiz-questions" style="display: none;">
+                <div class="quiz-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span class="progress-text" id="progressText">Question 1 of 10</span>
+                </div>
+
+                <div class="question-container" id="questionContainer">
+                    <!-- Questions will be dynamically inserted here -->
+                </div>
+
+                <div class="quiz-navigation">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()" style="display: none;">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-success" id="submitBtn" onclick="submitQuiz()" style="display: none;">
+                        <i class="fas fa-check"></i> Submit Quiz
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Results -->
+            <div id="quizResults" class="quiz-results" style="display: none;">
+                <div class="results-header">
+                    <div class="score-circle">
+                        <div class="score-number" id="finalScore">0</div>
+                        <div class="score-label">Score</div>
+                    </div>
+                    <h2 id="scoreMessage">Great Job!</h2>
+                    <p id="scoreDescription">You have a solid understanding of resume optimization.</p>
+                </div>
+
+                <div class="results-breakdown">
+                    <h3>Results Breakdown</h3>
+                    <div class="breakdown-grid" id="breakdownGrid">
+                        <!-- Results will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <div class="results-recommendations">
+                    <h3>Recommendations</h3>
+                    <div class="recommendations-list" id="recommendationsList">
+                        <!-- Recommendations will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <button class="btn btn-primary" onclick="saveResults()">
+                        <i class="fas fa-save"></i> Save to Dashboard
+                    </button>
+                    <button class="btn btn-secondary" onclick="retakeQuiz()">
+                        <i class="fas fa-redo"></i> Retake Quiz
+                    </button>
+                    <a href="dashboard.html" class="btn btn-outline">
+                        <i class="fas fa-tachometer-alt"></i> View Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Resume Optimizer</span>
+                </div>
+                <p>Helping job seekers optimize their resumes for better opportunities.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="features.html">Features</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Tools</h3>
+                <ul>
+                    <li><a href="upload.html">Resume Optimizer</a></li>
+                    <li><a href="quiz.html">Skills Quiz</a></li>
+                    <li><a href="result.html">Results</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Account</h3>
+                <ul>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="signup.html">Sign Up</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Resume Optimizer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <style>
+        .quiz-start {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .quiz-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .quiz-info {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--bg-tertiary);
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .info-card i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .info-card h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .quiz-categories {
+            margin-bottom: 2rem;
+        }
+
+        .quiz-categories h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .category-tag {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 10%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            color: var(--text-primary);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .question-container {
+            min-height: 400px;
+            margin-bottom: 2rem;
+        }
+
+        .question-card {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-number {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+        }
+
+        .question-category {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .option:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+        }
+
+        .option-text {
+            flex: 1;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quiz-results {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .score-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .results-header h2 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .results-header p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .results-breakdown,
+        .results-recommendations {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .results-breakdown h3,
+        .results-recommendations h3 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .breakdown-item {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .breakdown-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breakdown-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .breakdown-score.excellent { color: var(--success-color); }
+        .breakdown-score.good { color: var(--primary-color); }
+        .breakdown-score.fair { color: var(--warning-color); }
+        .breakdown-score.poor { color: var(--error-color); }
+
+        .breakdown-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .recommendations-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .recommendation-item {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .recommendation-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .recommendation-item p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .results-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quiz-navigation {
+                flex-direction: column;
+            }
+            
+            .quiz-navigation .btn {
+                width: 100%;
+            }
+            
+            .results-actions {
+                flex-direction: column;
+            }
+            
+            .results-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                category: "Resume Writing",
+                question: "What is the ideal length for a professional resume?",
+                options: [
+                    "Always one page regardless of experience",
+                    "1-2 pages for most professionals, 3+ for senior roles",
+                    "As long as needed to include everything",
+                    "Exactly two pages always"
+                ],
+                correct: 1,
+                explanation: "Most professionals should aim for 1-2 pages, with senior roles potentially requiring more space for extensive experience."
+            },
+            {
+                id: 2,
+                category: "ATS Optimization",
+                question: "What does ATS stand for in job applications?",
+                options: [
+                    "Automated Tracking System",
+                    "Applicant Tracking System",
+                    "Advanced Technology Scanner",
+                    "Application Testing Software"
+                ],
+                correct: 1,
+                explanation: "ATS stands for Applicant Tracking System, software used by employers to filter and rank resumes."
+            },
+            {
+                id: 3,
+                category: "Keywords",
+                question: "Where should you primarily source keywords for your resume?",
+                options: [
+                    "Generic industry websites",
+                    "The specific job description you're applying for",
+                    "Your previous job descriptions",
+                    "Popular resume templates"
+                ],
+                correct: 1,
+                explanation: "The job description is the best source for relevant keywords that the ATS will be looking for."
+            },
+            {
+                id: 4,
+                category: "Formatting",
+                question: "Which file format is generally best for ATS compatibility?",
+                options: [
+                    "PDF only",
+                    "Word document only",
+                    "Both PDF and Word are usually fine",
+                    "Plain text only"
+                ],
+                correct: 2,
+                explanation: "Most modern ATS systems can read both PDF and Word documents effectively."
+            },
+            {
+                id: 5,
+                category: "Resume Writing",
+                question: "What should be the focus of your resume bullet points?",
+                options: [
+                    "Job responsibilities and duties",
+                    "Achievements and quantifiable results",
+                    "Personal interests and hobbies",
+                    "Educational background details"
+                ],
+                correct: 1,
+                explanation: "Focus on achievements and quantifiable results rather than just listing job duties."
+            },
+            {
+                id: 6,
+                category: "ATS Optimization",
+                question: "Which of these can negatively impact ATS readability?",
+                options: [
+                    "Using standard fonts like Arial or Calibri",
+                    "Including relevant keywords",
+                    "Complex graphics and unusual formatting",
+                    "Having clear section headers"
+                ],
+                correct: 2,
+                explanation: "Complex graphics, unusual fonts, and creative formatting can confuse ATS systems."
+            },
+            {
+                id: 7,
+                category: "Job Search",
+                question: "How should you customize your resume for different job applications?",
+                options: [
+                    "Use the same resume for all applications",
+                    "Only change the objective statement",
+                    "Tailor keywords and relevant experience for each role",
+                    "Only change the contact information"
+                ],
+                correct: 2,
+                explanation: "Tailoring your resume with relevant keywords and experience for each specific role increases your chances of success."
+            },
+            {
+                id: 8,
+                category: "Keywords",
+                question: "How should you incorporate keywords into your resume?",
+                options: [
+                    "List them all in a separate keywords section",
+                    "Naturally integrate them into your experience and skills",
+                    "Repeat them as many times as possible",
+                    "Only use them in the summary section"
+                ],
+                correct: 1,
+                explanation: "Keywords should be naturally integrated throughout your resume in context, not just listed separately."
+            },
+            {
+                id: 9,
+                category: "Formatting",
+                question: "What's the best practice for resume section headers?",
+                options: [
+                    "Use creative, unique names for sections",
+                    "Use standard, recognizable section names",
+                    "Avoid section headers altogether",
+                    "Use only symbols instead of text"
+                ],
+                correct: 1,
+                explanation: "Standard section names like 'Experience', 'Education', and 'Skills' are easily recognized by both ATS and human readers."
+            },
+            {
+                id: 10,
+                category: "Resume Writing",
+                question: "Which information should NOT be included on a modern resume?",
+                options: [
+                    "Professional email address",
+                    "Relevant work experience",
+                    "Photo, age, and marital status",
+                    "Key skills and achievements"
+                ],
+                correct: 2,
+                explanation: "Personal information like photos, age, and marital status should not be included on resumes in most countries due to discrimination laws."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let quizStartTime = null;
+
+        function startQuiz() {
+            document.getElementById('quizStart').style.display = 'none';
+            document.getElementById('quizQuestions').style.display = 'block';
+            quizStartTime = new Date();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            const container = document.getElementById('questionContainer');
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-number">Question ${currentQuestion + 1}</div>
+                        <div class="question-category">${question.category}</div>
+                    </div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options">
+                        ${question.options.map((option, index) => `
+                            <div class="option" onclick="selectOption(${index})">
+                                <input type="radio" name="question${question.id}" value="${index}" id="option${index}">
+                                <div class="option-text">${option}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Update progress
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').style.display = currentQuestion > 0 ? 'block' : 'none';
+            document.getElementById('nextBtn').style.display = currentQuestion < questions.length - 1 ? 'block' : 'none';
+            document.getElementById('submitBtn').style.display = currentQuestion === questions.length - 1 ? 'block' : 'none';
+
+            // Restore previous answer if exists
+            if (userAnswers[currentQuestion] !== undefined) {
+                selectOption(userAnswers[currentQuestion], false);
+            }
+        }
+
+        function selectOption(optionIndex, updateAnswer = true) {
+            // Remove previous selection
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // Add selection to clicked option
+            const selectedOption = document.querySelectorAll('.option')[optionIndex];
+            selectedOption.classList.add('selected');
+            selectedOption.querySelector('input').checked = true;
+
+            if (updateAnswer) {
+                userAnswers[currentQuestion] = optionIndex;
+            }
+        }
+
+        function nextQuestion() {
+            if (userAnswers[currentQuestion] === undefined) {
+                alert('Please select an answer before proceeding.');
+                return;
+            }
+
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            if (userAnswers[currentQuestion] === undefined) {
+                alert('Please select an answer before submitting.');
+                return;
+            }
+
+            // Calculate results
+            const results = calculateResults();
+            showResults(results);
+        }
+
+        function calculateResults() {
+            let correctAnswers = 0;
+            const categoryScores = {};
+
+            questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === question.correct;
+                
+                if (isCorrect) correctAnswers++;
+
+                // Track category performance
+                if (!categoryScores[question.category]) {
+                    categoryScores[question.category] = { correct: 0, total: 0 };
+                }
+                categoryScores[question.category].total++;
+                if (isCorrect) categoryScores[question.category].correct++;
+            });
+
+            const totalScore = Math.round((correctAnswers / questions.length) * 100);
+            const quizDuration = Math.round((new Date() - quizStartTime) / 1000 / 60);
+
+            return {
+                totalScore,
+                correctAnswers,
+                totalQuestions: questions.length,
+                categoryScores,
+                duration: quizDuration,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        function showResults(results) {
+            document.getElementById('quizQuestions').style.display = 'none';
+            document.getElementById('quizResults').style.display = 'block';
+
+            // Update score display
+            document.getElementById('finalScore').textContent = results.totalScore + '%';
+
+            // Update score message
+            let message, description;
+            if (results.totalScore >= 90) {
+                message = "Excellent!";
+                description = "You have outstanding knowledge of resume optimization and ATS best practices.";
+            } else if (results.totalScore >= 80) {
+                message = "Great Job!";
+                description = "You have a solid understanding of resume optimization with room for minor improvements.";
+            } else if (results.totalScore >= 70) {
+                message = "Good Work!";
+                description = "You have good basic knowledge but could benefit from learning more about ATS optimization.";
+            } else if (results.totalScore >= 60) {
+                message = "Keep Learning!";
+                description = "You have some understanding but should focus on improving your resume optimization knowledge.";
+            } else {
+                message = "Room for Improvement";
+                description = "Consider studying resume best practices and ATS optimization techniques.";
+            }
+
+            document.getElementById('scoreMessage').textContent = message;
+            document.getElementById('scoreDescription').textContent = description;
+
+            // Show category breakdown
+            const breakdownGrid = document.getElementById('breakdownGrid');
+            breakdownGrid.innerHTML = '';
+
+            Object.entries(results.categoryScores).forEach(([category, scores]) => {
+                const percentage = Math.round((scores.correct / scores.total) * 100);
+                let scoreClass = 'poor';
+                if (percentage >= 90) scoreClass = 'excellent';
+                else if (percentage >= 80) scoreClass = 'good';
+                else if (percentage >= 70) scoreClass = 'fair';
+
+                breakdownGrid.innerHTML += `
+                    <div class="breakdown-item">
+                        <h4>${category}</h4>
+                        <div class="breakdown-score ${scoreClass}">${percentage}%</div>
+                        <div class="breakdown-label">${scores.correct}/${scores.total} correct</div>
+                    </div>
+                `;
+            });
+
+            // Show recommendations
+            const recommendationsList = document.getElementById('recommendationsList');
+            const recommendations = generateRecommendations(results);
+            recommendationsList.innerHTML = recommendations.map(rec => `
+                <div class="recommendation-item">
+                    <h4><i class="${rec.icon}"></i> ${rec.title}</h4>
+                    <p>${rec.description}</p>
+                </div>
+            `).join('');
+        }
+
+        function generateRecommendations(results) {
+            const recommendations = [];
+
+            // Check category performance and generate specific recommendations
+            Object.entries(results.categoryScores).forEach(([category, scores]) => {
+                const percentage = (scores.correct / scores.total) * 100;
+                
+                if (percentage < 80) {
+                    switch (category) {
+                        case 'Resume Writing':
+                            recommendations.push({
+                                icon: 'fas fa-edit',
+                                title: 'Improve Resume Writing Skills',
+                                description: 'Focus on writing achievement-based bullet points and structuring your resume effectively.'
+                            });
+                            break;
+                        case 'ATS Optimization':
+                            recommendations.push({
+                                icon: 'fas fa-robot',
+                                title: 'Learn ATS Best Practices',
+                                description: 'Study how Applicant Tracking Systems work and optimize your resume format accordingly.'
+                            });
+                            break;
+                        case 'Keywords':
+                            recommendations.push({
+                                icon: 'fas fa-key',
+                                title: 'Master Keyword Strategy',
+                                description: 'Learn how to identify and naturally incorporate relevant keywords from job descriptions.'
+                            });
+                            break;
+                        case 'Formatting':
+                            recommendations.push({
+                                icon: 'fas fa-align-left',
+                                title: 'Optimize Resume Format',
+                                description: 'Use ATS-friendly formatting with clear sections and standard fonts.'
+                            });
+                            break;
+                        case 'Job Search':
+                            recommendations.push({
+                                icon: 'fas fa-search',
+                                title: 'Enhance Job Search Strategy',
+                                description: 'Learn effective job search techniques and how to tailor applications for specific roles.'
+                            });
+                            break;
+                    }
+                }
+            });
+
+            // Add general recommendations based on overall score
+            if (results.totalScore < 70) {
+                recommendations.push({
+                    icon: 'fas fa-book',
+                    title: 'Study Resume Best Practices',
+                    description: 'Consider taking a comprehensive course on modern resume writing and job search strategies.'
+                });
+            }
+
+            if (recommendations.length === 0) {
+                recommendations.push({
+                    icon: 'fas fa-star',
+                    title: 'Maintain Your Excellence',
+                    description: 'Keep up with the latest trends in resume optimization and continue refining your approach.'
+                });
+            }
+
+            return recommendations;
+        }
+
+        function saveResults() {
+            const results = calculateResults();
+            
+            // Get existing quiz results from localStorage
+            let quizHistory = JSON.parse(localStorage.getItem('quizHistory') || '[]');
+            
+            // Add current results
+            quizHistory.push({
+                ...results,
+                id: Date.now(),
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString()
+            });
+            
+            // Save to localStorage
+            localStorage.setItem('quizHistory', JSON.stringify(quizHistory));
+            
+            alert('Results saved to your dashboard!');
+        }
+
+        function retakeQuiz() {
+            currentQuestion = 0;
+            userAnswers = [];
+            quizStartTime = null;
+            
+            document.getElementById('quizResults').style.display = 'none';
+            document.getElementById('quizStart').style.display = 'block';
+        }
+
+        // Initialize quiz
+        document.addEventListener('DOMContentLoaded', function() {
+            // Any initialization code can go here
+        });
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>

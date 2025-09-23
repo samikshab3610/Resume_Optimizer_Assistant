@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Optimizer - Upload Resume</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-file-alt"></i>
+                <span>Resume Optimizer</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="features.html" class="nav-link">Features</a></li>
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="login.html" class="nav-link login-btn">Login/Signup</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main style="margin-top: 70px; min-height: 90vh; padding: 2rem;">
+        <div class="container">
+            <div class="upload-container">
+                <div class="upload-header">
+                    <h1>Resume Optimization</h1>
+                    <p>Upload your resume and job description to get personalized ATS optimization suggestions</p>
+                </div>
+
+                <div class="upload-steps">
+                    <div class="step-indicator">
+                        <div class="step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <span>Upload Resume</span>
+                        </div>
+                        <div class="step" data-step="2">
+                            <div class="step-number">2</div>
+                            <span>Job Description</span>
+                        </div>
+                        <div class="step" data-step="3">
+                            <div class="step-number">3</div>
+                            <span>Analysis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="optimizationForm" class="upload-form">
+                    <!-- Step 1: Resume Upload -->
+                    <div class="form-step active" id="step1">
+                        <div class="form-section">
+                            <h3><i class="fas fa-file-upload"></i> Upload Your Resume</h3>
+                            <p>Upload your resume in PDF, DOC, DOCX, or image format</p>
+                            
+                            <div class="upload-options">
+                                <div class="file-upload" id="fileUpload">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <h4>Drag & Drop your resume here</h4>
+                                    <p>or click to browse files</p>
+                                    <input type="file" id="resumeFile" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" hidden>
+                                    <div class="file-info" id="fileInfo" style="display: none;">
+                                        <i class="fas fa-file"></i>
+                                        <span class="file-name"></span>
+                                        <button type="button" class="remove-file" onclick="removeFile()">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="upload-divider">
+                                    <span>OR</span>
+                                </div>
+                                
+                                <div class="text-input-section">
+                                    <label for="resumeText">Paste Resume Text</label>
+                                    <textarea id="resumeText" class="form-control" rows="10" placeholder="Paste your resume content here..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                Next Step <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Job Description -->
+                    <div class="form-step" id="step2">
+                        <div class="form-section">
+                            <h3><i class="fas fa-briefcase"></i> Job Description</h3>
+                            <p>Paste the job description you're applying for to get targeted optimization suggestions</p>
+                            
+                            <div class="form-group">
+                                <label for="jobTitle">Job Title</label>
+                                <input type="text" id="jobTitle" class="form-control" placeholder="e.g., Software Engineer, Marketing Manager">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="company">Company Name (Optional)</label>
+                                <input type="text" id="company" class="form-control" placeholder="e.g., Google, Microsoft">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="jobDescription">Job Description</label>
+                                <textarea id="jobDescription" class="form-control" rows="12" placeholder="Paste the complete job description here..." required></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep()">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                Analyze Resume <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Analysis -->
+                    <div class="form-step" id="step3">
+                        <div class="analysis-section">
+                            <div class="analysis-loading" id="analysisLoading">
+                                <div class="loading-animation">
+                                    <div class="loading-spinner"></div>
+                                    <h3>Analyzing Your Resume</h3>
+                                    <p>Our AI is comparing your resume with the job description...</p>
+                                    <div class="loading-steps">
+                                        <div class="loading-step active">
+                                            <i class="fas fa-file-text"></i>
+                                            <span>Parsing resume content</span>
+                                        </div>
+                                        <div class="loading-step">
+                                            <i class="fas fa-search"></i>
+                                            <span>Analyzing keywords</span>
+                                        </div>
+                                        <div class="loading-step">
+                                            <i class="fas fa-chart-bar"></i>
+                                            <span>Calculating ATS score</span>
+                                        </div>
+                                        <div class="loading-step">
+                                            <i class="fas fa-lightbulb"></i>
+                                            <span>Generating suggestions</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="analysis-complete" id="analysisComplete" style="display: none;">
+                                <div class="success-message">
+                                    <i class="fas fa-check-circle"></i>
+                                    <h3>Analysis Complete!</h3>
+                                    <p>Your resume has been successfully analyzed</p>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-primary" onclick="viewResults()">
+                                        <i class="fas fa-chart-line"></i>
+                                        View Results
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="startOver()">
+                                        <i class="fas fa-redo"></i>
+                                        Analyze Another Resume
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Resume Optimizer</span>
+                </div>
+                <p>Helping job seekers optimize their resumes for better opportunities.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="features.html">Features</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Tools</h3>
+                <ul>
+                    <li><a href="upload.html">Resume Optimizer</a></li>
+                    <li><a href="quiz.html">Skills Quiz</a></li>
+                    <li><a href="result.html">Results</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Account</h3>
+                <ul>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="signup.html">Sign Up</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Resume Optimizer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <style>
+        .upload-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .upload-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .upload-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .upload-steps {
+            margin-bottom: 3rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-number {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .step span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .step.active span {
+            color: var(--primary-color);
+        }
+
+        .upload-form {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .form-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-section h3 i {
+            color: var(--primary-color);
+        }
+
+        .form-section > p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .upload-options {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .file-upload {
+            border: 2px dashed var(--border-color);
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .file-upload.dragover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .file-upload i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .file-upload h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .file-info i {
+            font-size: 1.5rem;
+            color: var(--success-color);
+        }
+
+        .file-name {
+            flex: 1;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .remove-file {
+            background: var(--error-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-file:hover {
+            background: #dc2626;
+        }
+
+        .upload-divider {
+            text-align: center;
+            position: relative;
+            color: var(--text-muted);
+        }
+
+        .upload-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .upload-divider span {
+            background: var(--bg-secondary);
+            padding: 0 1rem;
+        }
+
+        .text-input-section label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .analysis-section {
+            text-align: center;
+        }
+
+        .loading-animation {
+            padding: 3rem 0;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(99, 102, 241, 0.2);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 2rem;
+        }
+
+        .loading-animation h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .loading-animation > p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .loading-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .loading-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background: var(--bg-tertiary);
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .loading-step.active {
+            opacity: 1;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .loading-step i {
+            color: var(--primary-color);
+            width: 20px;
+        }
+
+        .loading-step span {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .success-message {
+            padding: 2rem 0;
+        }
+
+        .success-message i {
+            font-size: 4rem;
+            color: var(--success-color);
+            margin-bottom: 1rem;
+        }
+
+        .success-message h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .success-message p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .step-indicator {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .step-indicator::before {
+                display: none;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        // File upload handling
+        const fileUpload = document.getElementById('fileUpload');
+        const fileInput = document.getElementById('resumeFile');
+        const fileInfo = document.getElementById('fileInfo');
+
+        fileUpload.addEventListener('click', () => fileInput.click());
+        fileUpload.addEventListener('dragover', handleDragOver);
+        fileUpload.addEventListener('dragleave', handleDragLeave);
+        fileUpload.addEventListener('drop', handleDrop);
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            fileUpload.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        function handleFile(file) {
+            const fileName = file.name;
+            const fileSize = (file.size / 1024 / 1024).toFixed(2);
+            
+            document.querySelector('.file-name').textContent = `${fileName} (${fileSize} MB)`;
+            fileInfo.style.display = 'flex';
+            
+            // Hide upload area content
+            fileUpload.querySelector('i').style.display = 'none';
+            fileUpload.querySelector('h4').style.display = 'none';
+            fileUpload.querySelector('p').style.display = 'none';
+        }
+
+        function removeFile() {
+            fileInput.value = '';
+            fileInfo.style.display = 'none';
+            
+            // Show upload area content
+            fileUpload.querySelector('i').style.display = 'block';
+            fileUpload.querySelector('h4').style.display = 'block';
+            fileUpload.querySelector('p').style.display = 'block';
+        }
+
+        function nextStep() {
+            if (currentStep === 1) {
+                // Validate step 1
+                const hasFile = fileInput.files.length > 0;
+                const hasText = document.getElementById('resumeText').value.trim();
+                
+                if (!hasFile && !hasText) {
+                    alert('Please upload a resume file or paste resume text to continue.');
+                    return;
+                }
+            }
+            
+            if (currentStep === 2) {
+                // Validate step 2
+                const jobDescription = document.getElementById('jobDescription').value.trim();
+                if (!jobDescription) {
+                    alert('Please enter the job description to continue.');
+                    return;
+                }
+                
+                // Start analysis
+                startAnalysis();
+            }
+            
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateSteps();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateSteps();
+            }
+        }
+
+        function updateSteps() {
+            // Update step indicators
+            document.querySelectorAll('.step').forEach((step, index) => {
+                if (index + 1 <= currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+            
+            // Update form steps
+            document.querySelectorAll('.form-step').forEach((step, index) => {
+                if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+        }
+
+        function startAnalysis() {
+            const loadingSteps = document.querySelectorAll('.loading-step');
+            let currentLoadingStep = 0;
+            
+            const interval = setInterval(() => {
+                if (currentLoadingStep < loadingSteps.length) {
+                    loadingSteps.forEach(step => step.classList.remove('active'));
+                    loadingSteps[currentLoadingStep].classList.add('active');
+                    currentLoadingStep++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById('analysisLoading').style.display = 'none';
+                        document.getElementById('analysisComplete').style.display = 'block';
+                    }, 1000);
+                }
+            }, 1500);
+        }
+
+        function viewResults() {
+            // Store form data in localStorage for the results page
+            const formData = {
+                jobTitle: document.getElementById('jobTitle').value,
+                company: document.getElementById('company').value,
+                jobDescription: document.getElementById('jobDescription').value,
+                resumeText: document.getElementById('resumeText').value,
+                fileName: fileInput.files.length > 0 ? fileInput.files[0].name : null,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('currentAnalysis', JSON.stringify(formData));
+            window.location.href = 'result.html';
+        }
+
+        function startOver() {
+            currentStep = 1;
+            updateSteps();
+            
+            // Reset form
+            document.getElementById('optimizationForm').reset();
+            removeFile();
+            document.getElementById('analysisLoading').style.display = 'block';
+            document.getElementById('analysisComplete').style.display = 'none';
+        }
+
+        // Initialize
+        updateSteps();
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>
