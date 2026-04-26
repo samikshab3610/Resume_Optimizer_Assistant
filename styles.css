@@ -837,3 +837,8 @@ textarea.form-control {
 .mt-3 { margin-top: 1.5rem; }
 .hidden { display: none; }
 .visible { display: block; }
+
+.values-section{
+    margin-bottom: 10rem;
+}
+
