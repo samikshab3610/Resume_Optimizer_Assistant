@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getResumeHistory } from "../api/resumeApi";
 
 function Dashboard() {
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const [resumeHistory, setResumeHistory] = useState(
     JSON.parse(localStorage.getItem("resumeHistory") || "[]")
   );
@@ -10,15 +14,36 @@ function Dashboard() {
     JSON.parse(localStorage.getItem("quizHistory") || "[]")
   );
 
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      setIsLoading(true);
+
+      try {
+        const data = await getResumeHistory();
+
+        if (Array.isArray(data.resumeHistory)) {
+          setResumeHistory(data.resumeHistory);
+        }
+      } catch (err) {
+        // Backend is not connected yet. Keep using localStorage fallback.
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadDashboardData();
+  }, []);
+
+
   const totalAnalyses = resumeHistory.length;
   const totalQuizzes = quizHistory.length;
 
   const averageScore =
     totalAnalyses > 0
       ? Math.round(
-          resumeHistory.reduce((sum, item) => sum + Number(item.atsScore || 0), 0) /
-            totalAnalyses
-        )
+        resumeHistory.reduce((sum, item) => sum + Number(item.atsScore || 0), 0) /
+        totalAnalyses
+      )
       : "--";
 
   const bestQuizScore =
@@ -54,6 +79,7 @@ function Dashboard() {
             <i className="fas fa-tachometer-alt"></i> Dashboard
           </h1>
           <p>Track your resume optimization progress and quiz performance</p>
+          {isLoading && <p className="form-error">Loading dashboard data...</p>}
         </div>
 
         <div className="dashboard-grid">

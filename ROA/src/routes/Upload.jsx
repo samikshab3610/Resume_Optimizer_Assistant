@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { analyzeResume } from "../api/resumeApi";
 
+// Upload function
 function Upload() {
   const navigate = useNavigate();
 
@@ -9,6 +11,8 @@ function Upload() {
   const [isDragOver, setIsDragOver] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
   const [analysisComplete, setAnalysisComplete] = useState(false);
+  const [apiError, setApiError] = useState("");
+
 
   const [formData, setFormData] = useState({
     resumeText: "",
@@ -62,21 +66,39 @@ function Upload() {
     setCurrentStep((step) => Math.max(step - 1, 1));
   };
 
-  const startAnalysis = () => {
+  // Start Analysis Function
+  const startAnalysis = async () => {
+    setApiError("");
     setAnalysisComplete(false);
     setLoadingStep(0);
 
     loadingSteps.forEach((_, index) => {
       setTimeout(() => {
         setLoadingStep(index);
-      }, index * 1500);
+      }, index * 800);
     });
 
-    setTimeout(() => {
-      setAnalysisComplete(true);
-    }, loadingSteps.length * 1500 + 1000);
+    try {
+      const result = await analyzeResume({
+        resumeFile: selectedFile,
+        resumeText: formData.resumeText,
+        jobTitle: formData.jobTitle,
+        company: formData.company,
+        jobDescription: formData.jobDescription,
+      });
+
+      localStorage.setItem("currentAnalysisResult", JSON.stringify(result));
+    } catch (err) {
+      setApiError("Backend is not connected yet. Showing mock analysis result for now.");
+      localStorage.removeItem("currentAnalysisResult");
+    } finally {
+      setTimeout(() => {
+        setAnalysisComplete(true);
+      }, loadingSteps.length * 800 + 500);
+    }
   };
 
+  // View Results Function
   const viewResults = () => {
     const analysisData = {
       ...formData,
@@ -93,6 +115,7 @@ function Upload() {
     setSelectedFile(null);
     setLoadingStep(0);
     setAnalysisComplete(false);
+    setApiError("");
     setFormData({
       resumeText: "",
       jobTitle: "",
@@ -279,15 +302,14 @@ function Upload() {
                             className={`loading-step ${loadingStep === index ? "active" : ""}`}
                           >
                             <i
-                              className={`fas ${
-                                index === 0
-                                  ? "fa-file-text"
-                                  : index === 1
-                                    ? "fa-search"
-                                    : index === 2
-                                      ? "fa-chart-bar"
-                                      : "fa-lightbulb"
-                              }`}
+                              className={`fas ${index === 0
+                                ? "fa-file-text"
+                                : index === 1
+                                  ? "fa-search"
+                                  : index === 2
+                                    ? "fa-chart-bar"
+                                    : "fa-lightbulb"
+                                }`}
                             ></i>
                             <span>{step}</span>
                           </div>
@@ -303,6 +325,7 @@ function Upload() {
                       <i className="fas fa-check-circle"></i>
                       <h3>Analysis Complete!</h3>
                       <p>Your resume has been successfully analyzed</p>
+                      {apiError && <p className="form-error">{apiError}</p>}
                     </div>
 
                     <div className="form-actions">

@@ -1,10 +1,47 @@
 import { Link } from "react-router-dom";
 
-const missingKeywords = ["Python", "Machine Learning", "AWS", "Agile", "Docker", "CI/CD"];
-const matchedKeywords = ["JavaScript", "React", "Node.js", "Git", "SQL", "API"];
-
 function Result() {
   const currentAnalysis = JSON.parse(localStorage.getItem("currentAnalysis") || "{}");
+  const currentAnalysisResult = JSON.parse(localStorage.getItem("currentAnalysisResult") || "null");
+
+  const atsScore = currentAnalysisResult?.score || 85;
+
+  const missingKeywords = currentAnalysisResult?.missingKeywords || [
+    "Python",
+    "Machine Learning",
+    "AWS",
+    "Agile",
+    "Docker",
+    "CI/CD",
+  ];
+
+  const matchedKeywords = currentAnalysisResult?.matchedKeywords || [
+    "JavaScript",
+    "React",
+    "Node.js",
+    "Git",
+    "SQL",
+    "API",
+  ];
+
+  const suggestions = currentAnalysisResult?.suggestions || [
+    {
+      icon: "fas fa-plus-circle",
+      title: "Add Technical Skills",
+      description: "Include Python, Machine Learning, and AWS in your skills section to match job requirements.",
+    },
+    {
+      icon: "fas fa-edit",
+      title: "Enhance Experience Descriptions",
+      description: "Incorporate Agile methodology and CI/CD pipeline experience in your work history.",
+    },
+    {
+      icon: "fas fa-chart-bar",
+      title: "Quantify Achievements",
+      description: "Add specific metrics and numbers to demonstrate the impact of your work.",
+    },
+  ];
+
 
   const analysisDate = currentAnalysis.timestamp
     ? new Date(currentAnalysis.timestamp).toLocaleDateString()
@@ -15,7 +52,7 @@ function Result() {
 
     resumeHistory.push({
       id: Date.now(),
-      atsScore: 85,
+      atsScore,
       jobTitle: currentAnalysis.jobTitle || "Software Engineer",
       company: currentAnalysis.company || "Tech Corp",
       fileName: currentAnalysis.fileName || "Pasted Resume Text",
@@ -78,35 +115,19 @@ function Result() {
           <div className="detail-section">
             <h3><i className="fas fa-lightbulb"></i> Optimization Suggestions</h3>
             <div className="suggestions-list" id="suggestionsList">
-              <div className="suggestion-item">
-                <div className="suggestion-icon">
-                  <i className="fas fa-plus-circle"></i>
-                </div>
-                <div className="suggestion-content">
-                  <h4>Add Technical Skills</h4>
-                  <p>Include Python, Machine Learning, and AWS in your skills section to match job requirements.</p>
-                </div>
-              </div>
 
-              <div className="suggestion-item">
-                <div className="suggestion-icon">
-                  <i className="fas fa-edit"></i>
-                </div>
-                <div className="suggestion-content">
-                  <h4>Enhance Experience Descriptions</h4>
-                  <p>Incorporate Agile methodology and CI/CD pipeline experience in your work history.</p>
-                </div>
-              </div>
 
-              <div className="suggestion-item">
-                <div className="suggestion-icon">
-                  <i className="fas fa-chart-bar"></i>
+              {suggestions.map((suggestion) => (
+                <div className="suggestion-item" key={suggestion.title}>
+                  <div className="suggestion-icon">
+                    <i className={suggestion.icon || "fas fa-lightbulb"}></i>
+                  </div>
+                  <div className="suggestion-content">
+                    <h4>{suggestion.title}</h4>
+                    <p>{suggestion.description}</p>
+                  </div>
                 </div>
-                <div className="suggestion-content">
-                  <h4>Quantify Achievements</h4>
-                  <p>Add specific metrics and numbers to demonstrate the impact of your work.</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 

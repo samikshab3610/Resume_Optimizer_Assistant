@@ -1,8 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { loginUser, signupUser } from "../api/authApi";
+import { saveAuthData } from "../utils/storage";
+
 
 function Login() {
   const [activeTab, setActiveTab] = useState("login");
   const [visiblePasswords, setVisiblePasswords] = useState({});
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
 
   const togglePassword = (fieldId) => {
     setVisiblePasswords((current) => ({
@@ -11,10 +19,48 @@ function Login() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Auth API connection will be added in backend/auth phase.
+    setError("");
+    setIsSubmitting(true);
+
+    const form = event.currentTarget;
+    const formValues = new FormData(form);
+
+    try {
+      let data;
+
+      if (activeTab === "login") {
+        data = await loginUser({
+          email: formValues.get("loginEmail"),
+          password: formValues.get("loginPassword"),
+        });
+      } else {
+        data = await signupUser({
+          firstName: formValues.get("firstName"),
+          lastName: formValues.get("lastName"),
+          email: formValues.get("signupEmail"),
+          password: formValues.get("signupPassword"),
+          confirmPassword: formValues.get("confirmPassword"),
+        });
+      }
+
+      saveAuthData({
+        token: data.token,
+        user: data.user,
+      });
+
+      navigate("/dashboard");
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+        "Backend is not connected yet. Auth will work after the server phase."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
 
   return (
     <main
@@ -32,14 +78,20 @@ function Login() {
             <button
               className={`auth-tab ${activeTab === "login" ? "active" : ""}`}
               type="button"
-              onClick={() => setActiveTab("login")}
+              onClick={() => {
+                setActiveTab("login");
+                setError("");
+              }}
             >
               Login
             </button>
             <button
               className={`auth-tab ${activeTab === "signup" ? "active" : ""}`}
               type="button"
-              onClick={() => setActiveTab("signup")}
+              onClick={() => {
+                setActiveTab("signup");
+                setError("");
+              }}
             >
               Sign Up
             </button>
@@ -52,12 +104,15 @@ function Login() {
                 <p>Sign in to access your dashboard and resume optimization tools</p>
               </div>
 
+
+              {error && <p className="form-error">{error}</p>}
               <form id="loginForm" onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="loginEmail">Email Address</label>
                   <input
                     type="email"
                     id="loginEmail"
+                    name="loginEmail"
                     className="form-control"
                     placeholder="Enter your email"
                     required
@@ -70,6 +125,7 @@ function Login() {
                     <input
                       type={visiblePasswords.loginPassword ? "text" : "password"}
                       id="loginPassword"
+                      name="loginPassword"
                       className="form-control"
                       placeholder="Enter your password"
                       required
@@ -95,9 +151,14 @@ function Login() {
                   </div>
                 </div>
 
-                <button type="submit" className="btn btn-primary" style={{ width: "100%" }}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ width: "100%" }}
+                  disabled={isSubmitting}
+                >
                   <i className="fas fa-sign-in-alt"></i>
-                  Sign In
+                  {isSubmitting ? "Please wait..." : "Sign In"}
                 </button>
               </form>
 
@@ -125,6 +186,7 @@ function Login() {
                 <p>Join us to optimize your resume and boost your career prospects</p>
               </div>
 
+              {error && <p className="form-error">{error}</p>}
               <form id="signupForm" onSubmit={handleSubmit}>
                 <div className="form-row">
                   <div className="form-group">
@@ -132,6 +194,7 @@ function Login() {
                     <input
                       type="text"
                       id="firstName"
+                      name="firstName"
                       className="form-control"
                       placeholder="First name"
                       required
@@ -143,6 +206,7 @@ function Login() {
                     <input
                       type="text"
                       id="lastName"
+                      name="lastName"
                       className="form-control"
                       placeholder="Last name"
                       required
@@ -155,6 +219,7 @@ function Login() {
                   <input
                     type="email"
                     id="signupEmail"
+                    name="signupEmail"
                     className="form-control"
                     placeholder="Enter your email"
                     required
@@ -167,6 +232,7 @@ function Login() {
                     <input
                       type={visiblePasswords.signupPassword ? "text" : "password"}
                       id="signupPassword"
+                      name="signupPassword"
                       className="form-control"
                       placeholder="Create a password"
                       required
@@ -194,6 +260,7 @@ function Login() {
                     <input
                       type={visiblePasswords.confirmPassword ? "text" : "password"}
                       id="confirmPassword"
+                      name="confirmPassword"
                       className="form-control"
                       placeholder="Confirm your password"
                       required
@@ -217,10 +284,16 @@ function Login() {
                   </label>
                 </div>
 
-                <button type="submit" className="btn btn-primary" style={{ width: "100%" }}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ width: "100%" }}
+                  disabled={isSubmitting}
+                >
                   <i className="fas fa-user-plus"></i>
-                  Create Account
+                  {isSubmitting ? "Please wait..." : "Create Account"}
                 </button>
+
               </form>
 
               <div className="auth-divider">
