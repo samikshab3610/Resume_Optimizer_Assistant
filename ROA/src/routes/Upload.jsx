@@ -11,6 +11,7 @@ function Upload() {
   const [isDragOver, setIsDragOver] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
   const [analysisComplete, setAnalysisComplete] = useState(false);
+  const [analysisSucceeded, setAnalysisSucceeded] = useState(false);
   const [apiError, setApiError] = useState("");
 
 
@@ -70,6 +71,7 @@ function Upload() {
   const startAnalysis = async () => {
     setApiError("");
     setAnalysisComplete(false);
+    setAnalysisSucceeded(false);
     setLoadingStep(0);
 
     loadingSteps.forEach((_, index) => {
@@ -88,9 +90,14 @@ function Upload() {
       });
 
       localStorage.setItem("currentAnalysisResult", JSON.stringify(result));
+      setAnalysisSucceeded(true);
     } catch (err) {
-      setApiError("Backend is not connected yet. Showing mock analysis result for now.");
+      setApiError(
+        err.response?.data?.message ||
+          "Resume analysis failed. Please upload a PDF/text file or paste resume text."
+      );
       localStorage.removeItem("currentAnalysisResult");
+      setAnalysisSucceeded(false);
     } finally {
       setTimeout(() => {
         setAnalysisComplete(true);
@@ -115,6 +122,7 @@ function Upload() {
     setSelectedFile(null);
     setLoadingStep(0);
     setAnalysisComplete(false);
+    setAnalysisSucceeded(false);
     setApiError("");
     setFormData({
       resumeText: "",
@@ -152,7 +160,7 @@ function Upload() {
             <div className={`form-step ${currentStep === 1 ? "active" : ""}`} id="step1">
               <div className="form-section">
                 <h3><i className="fas fa-file-upload"></i> Upload Your Resume</h3>
-                <p>Upload your resume in PDF, DOC, DOCX, or image format</p>
+                <p>Upload your resume in PDF or text format</p>
 
                 <div className="upload-options">
                   <div
@@ -186,7 +194,7 @@ function Upload() {
                     <input
                       type="file"
                       id="resumeFile"
-                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                      accept=".pdf,.txt"
                       hidden
                       onChange={(event) => {
                         if (event.target.files[0]) {
@@ -322,20 +330,26 @@ function Upload() {
                 {analysisComplete && (
                   <div className="analysis-complete" id="analysisComplete" style={{ display: "block" }}>
                     <div className="success-message">
-                      <i className="fas fa-check-circle"></i>
-                      <h3>Analysis Complete!</h3>
-                      <p>Your resume has been successfully analyzed</p>
+                      <i className={`fas ${analysisSucceeded ? "fa-check-circle" : "fa-times-circle"}`}></i>
+                      <h3>{analysisSucceeded ? "Analysis Complete!" : "Analysis Failed"}</h3>
+                      <p>
+                        {analysisSucceeded
+                          ? "Your resume has been successfully analyzed"
+                          : "Your resume was not saved. Please fix the issue and try again."}
+                      </p>
                       {apiError && <p className="form-error">{apiError}</p>}
                     </div>
 
                     <div className="form-actions">
-                      <button type="button" className="btn btn-primary" onClick={viewResults}>
-                        <i className="fas fa-chart-line"></i>
-                        View Results
-                      </button>
+                      {analysisSucceeded && (
+                        <button type="button" className="btn btn-primary" onClick={viewResults}>
+                          <i className="fas fa-chart-line"></i>
+                          View Results
+                        </button>
+                      )}
                       <button type="button" className="btn btn-secondary" onClick={startOver}>
                         <i className="fas fa-redo"></i>
-                        Analyze Another Resume
+                        {analysisSucceeded ? "Analyze Another Resume" : "Try Again"}
                       </button>
                     </div>
                   </div>

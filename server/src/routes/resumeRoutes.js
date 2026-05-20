@@ -5,7 +5,15 @@ const { analyzeResume, getResumeHistory } = require("../controllers/resumeContro
 
 const router = express.Router();
 
-router.post("/analyze", protect, upload.single("resume"), analyzeResume);
+router.post("/analyze", protect, (req, res, next) => {
+  upload.single("resume")(req, res, (error) => {
+    if (error) {
+      return res.status(400).json({ message: error.message });
+    }
+
+    next();
+  });
+}, analyzeResume);
 router.get("/history", protect, getResumeHistory);
 
 module.exports = router;
