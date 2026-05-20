@@ -160,7 +160,7 @@ function Upload() {
             <div className={`form-step ${currentStep === 1 ? "active" : ""}`} id="step1">
               <div className="form-section">
                 <h3><i className="fas fa-file-upload"></i> Upload Your Resume</h3>
-                <p>Upload your resume in PDF or text format</p>
+                <p>Upload your resume in PDF, TXT, DOCX, JPG, or PNG format</p>
 
                 <div className="upload-options">
                   <div
@@ -194,7 +194,7 @@ function Upload() {
                     <input
                       type="file"
                       id="resumeFile"
-                      accept=".pdf,.txt"
+                      accept=".pdf,.txt,.docx,.jpg,.jpeg,.png"
                       hidden
                       onChange={(event) => {
                         if (event.target.files[0]) {
