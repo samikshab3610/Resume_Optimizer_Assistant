@@ -71,6 +71,12 @@ function Dashboard() {
     setQuizHistory([]);
   };
 
+  const getScoreClass = (score) => {
+    if (score >= 80) return "score-high";
+    if (score >= 60) return "score-medium";
+    return "score-low";
+  };
+
   return (
     <main style={{ marginTop: "70px", minHeight: "90vh", padding: "2rem" }}>
       <div className="container">
@@ -146,14 +152,44 @@ function Dashboard() {
                 </Link>
               </div>
             ) : (
-              resumeHistory.map((item) => (
-                <div className="history-item" key={item.id}>
-                  <h3>{item.jobTitle}</h3>
-                  <p>{item.company}</p>
-                  <p>ATS Score: {item.atsScore}</p>
-                  <p>{item.date} {item.time}</p>
-                </div>
-              ))
+              <div className="history-list">
+                {resumeHistory.map((item) => (
+                  <div className="history-item" key={item.id}>
+                    <div className="history-header">
+                      <div className="history-title">
+                        <h4>{item.jobTitle || "Resume Analysis"}</h4>
+                        <p>{item.company || "No company provided"} • {item.date} {item.time}</p>
+                      </div>
+
+                      <div className="history-score">
+                        <span className={`score-badge ${getScoreClass(item.atsScore)}`}>
+                          {item.atsScore}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="history-details">
+                      <div className="detail-group">
+                        <h5>Matched Keywords</h5>
+                        <div className="keyword-tags">
+                          {(item.matchedKeywords || []).slice(0, 6).map((keyword) => (
+                            <span className="keyword-tag-small" key={keyword}>{keyword}</span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="detail-group">
+                        <h5>Missing Keywords</h5>
+                        <div className="keyword-tags">
+                          {(item.missingKeywords || []).slice(0, 6).map((keyword) => (
+                            <span className="keyword-tag-small" key={keyword}>{keyword}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>

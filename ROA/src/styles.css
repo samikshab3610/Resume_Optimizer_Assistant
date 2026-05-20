@@ -123,6 +123,12 @@ body {
     display: none;
 }
 
+.nav-link.login-btn {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
 .hamburger {
     display: none;
     flex-direction: column;

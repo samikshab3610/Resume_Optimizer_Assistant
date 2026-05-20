@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 
+import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./routes/Home";
 import About from "./routes/About";
 import Features from "./routes/Features";
@@ -23,11 +24,32 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/features" element={<Features />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/login" element={<Login />} />
-        <Route path="/upload" element={<Upload />} />
+        <Route
+          path="/upload"
+          element={
+            <ProtectedRoute>
+              <Upload />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/quiz" element={<Quiz />} />
-        <Route path="/result" element={<Result />} />
+        <Route
+          path="/result"
+          element={
+            <ProtectedRoute>
+              <Result />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       <Footer />

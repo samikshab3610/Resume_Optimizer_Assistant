@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, signupUser } from "../api/authApi";
-import { saveAuthData } from "../utils/storage";
+import { getToken, saveAuthData } from "../utils/storage";
 
 
 function Login() {
@@ -11,6 +11,11 @@ function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    if (getToken()) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const togglePassword = (fieldId) => {
     setVisiblePasswords((current) => ({

@@ -101,25 +101,6 @@ function Result() {
     ? new Date(currentAnalysis.timestamp).toLocaleDateString()
     : "January 15, 2025";
 
-  const saveToHistory = () => {
-    const resumeHistory = JSON.parse(localStorage.getItem("resumeHistory") || "[]");
-
-    resumeHistory.push({
-      id: Date.now(),
-      atsScore,
-      jobTitle: currentAnalysis.jobTitle || "Software Engineer",
-      company: currentAnalysis.company || "Tech Corp",
-      fileName: currentAnalysis.fileName || "Pasted Resume Text",
-      date: new Date().toLocaleDateString(),
-      time: new Date().toLocaleTimeString(),
-      matchedKeywords,
-      missingKeywords,
-    });
-
-    localStorage.setItem("resumeHistory", JSON.stringify(resumeHistory));
-    alert("Analysis saved to dashboard!");
-  };
-
   const downloadReport = () => {
     alert("Report download will be added in a later phase.");
   };
@@ -282,17 +263,14 @@ function Result() {
         </div>
 
         <div className="result-actions">
-          <button className="btn btn-primary" type="button" onClick={saveToHistory}>
-            <i className="fas fa-save"></i> Save to Dashboard
-          </button>
+          <Link to="/dashboard" className="btn btn-primary">
+            <i className="fas fa-tachometer-alt"></i> View Dashboard
+          </Link>
           <button className="btn btn-secondary" type="button" onClick={downloadReport}>
             <i className="fas fa-download"></i> Download Report
           </button>
           <Link to="/upload" className="btn btn-outline">
             <i className="fas fa-upload"></i> Analyze Another Resume
-          </Link>
-          <Link to="/dashboard" className="btn btn-outline">
-            <i className="fas fa-tachometer-alt"></i> View Dashboard
           </Link>
         </div>
       </div>

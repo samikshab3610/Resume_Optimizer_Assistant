@@ -1,11 +1,21 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { clearAuthData, getUser } from "../utils/storage";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const closeMenu = () => {
     setIsMenuOpen(false);
+  };
+
+  const navigate = useNavigate();
+  const user = getUser();
+
+  const handleLogout = () => {
+    clearAuthData();
+    closeMenu();
+    navigate("/login");
   };
 
   return (
@@ -37,15 +47,28 @@ function Navbar() {
               Dashboard
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              to="/login"
-              className={({ isActive }) => `nav-link login-btn ${isActive ? "active" : ""}`}
-              onClick={closeMenu}
-            >
-              Login/Signup
-            </NavLink>
-          </li>
+          {user ? (
+            <>
+              <li>
+                <span className="nav-link">Hi, {user.firstName}</span>
+              </li>
+              <li>
+                <button type="button" className="nav-link login-btn" onClick={handleLogout}>
+                  Logout
+                </button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <NavLink
+                to="/login"
+                className={({ isActive }) => `nav-link login-btn ${isActive ? "active" : ""}`}
+                onClick={closeMenu}
+              >
+                Login/Signup
+              </NavLink>
+            </li>
+          )}
         </ul>
 
         <button
