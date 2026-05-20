@@ -4,8 +4,50 @@ function Result() {
   const currentAnalysis = JSON.parse(localStorage.getItem("currentAnalysis") || "{}");
   const currentAnalysisResult = JSON.parse(localStorage.getItem("currentAnalysisResult") || "null");
 
-  const atsScore = currentAnalysisResult?.score || 85;
+  // ats score variable
+  const atsScore = Number(currentAnalysisResult?.score || currentAnalysisResult?.atsScore || 85);
 
+  //score interpretation
+  const getScoreInterpretation = (score) => {
+    if (score >= 85) {
+      return {
+        title: "Excellent Match!",
+        description: "Your resume is strongly aligned with the job requirements.",
+      };
+    }
+
+    if (score >= 70) {
+      return {
+        title: "Good Match!",
+        description: "Your resume shows solid alignment with the job requirements.",
+      };
+    }
+
+    if (score >= 50) {
+      return {
+        title: "Needs Improvement",
+        description: "Your resume matches some requirements but needs stronger keyword and experience alignment.",
+      };
+    }
+
+    return {
+      title: "Low Match",
+      description: "Your resume needs significant improvements to align with this job description.",
+    };
+  };
+
+  //score interpretaion variable
+  const scoreInterpretation = getScoreInterpretation(atsScore);
+
+  //score breakdown variable
+  const scoreBreakdown = currentAnalysisResult?.scoreBreakdown || {
+    keywordsMatch: atsScore,
+    formatQuality: atsScore,
+    skillsRelevance: atsScore,
+    experienceMatch: atsScore,
+  };
+
+  //hardcoded missing keywords
   const missingKeywords = currentAnalysisResult?.missingKeywords || [
     "Python",
     "Machine Learning",
@@ -15,6 +57,7 @@ function Result() {
     "CI/CD",
   ];
 
+  //hardcoded matched keywords
   const matchedKeywords = currentAnalysisResult?.matchedKeywords || [
     "JavaScript",
     "React",
@@ -24,6 +67,17 @@ function Result() {
     "API",
   ];
 
+
+  // dynamic keyword matching
+  const totalKeywords = matchedKeywords.length + missingKeywords.length;
+  const keywordsFoundText =
+    totalKeywords > 0 ? `${matchedKeywords.length} of ${totalKeywords}` : "0 of 0";
+
+  const matchRate =
+    totalKeywords > 0 ? Math.round((matchedKeywords.length / totalKeywords) * 100) : 0;
+
+
+  // hardcoded suggestions  
   const suggestions = currentAnalysisResult?.suggestions || [
     {
       icon: "fas fa-plus-circle",
@@ -79,12 +133,12 @@ function Result() {
 
           <div className="ats-score-display">
             <div className="score-circle-large">
-              <div className="ats-score" id="atsScore">85</div>
+              <div className="ats-score" id="atsScore">{atsScore}</div>
               <div className="score-label">ATS Score</div>
             </div>
             <div className="score-interpretation" id="scoreInterpretation">
-              <h3>Good Match!</h3>
-              <p>Your resume shows strong alignment with the job requirements.</p>
+              <h3>{scoreInterpretation.title}</h3>
+              <p>{scoreInterpretation.description}</p>
             </div>
           </div>
         </div>
@@ -158,16 +212,17 @@ function Result() {
                 </div>
                 <div className="detail-item">
                   <strong>Keywords Found:</strong>
-                  <span id="keywordsFound">6 of 12</span>
+                  <span id="keywordsFound">{keywordsFoundText}</span>
                 </div>
                 <div className="detail-item">
                   <strong>Match Rate:</strong>
-                  <span id="matchRate">50%</span>
+                  <span id="matchRate">{matchRate}%</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
 
         <div className="score-breakdown">
           <h3><i className="fas fa-analytics"></i> Score Breakdown</h3>
@@ -179,9 +234,9 @@ function Result() {
               </div>
               <div className="breakdown-score">
                 <div className="score-bar">
-                  <div className="score-fill" style={{ width: "50%" }}></div>
+                  <div className="score-fill" style={{ width: `${scoreBreakdown.keywordsMatch}%` }}></div>
                 </div>
-                <span className="score-text">50%</span>
+                <span className="score-text">{scoreBreakdown.keywordsMatch}%</span>
               </div>
             </div>
 
@@ -192,9 +247,9 @@ function Result() {
               </div>
               <div className="breakdown-score">
                 <div className="score-bar">
-                  <div className="score-fill" style={{ width: "95%" }}></div>
+                  <div className="score-fill" style={{ width: `${scoreBreakdown.formatQuality}%` }}></div>
                 </div>
-                <span className="score-text">95%</span>
+                <span className="score-text">{scoreBreakdown.formatQuality}%</span>
               </div>
             </div>
 
@@ -205,9 +260,9 @@ function Result() {
               </div>
               <div className="breakdown-score">
                 <div className="score-bar">
-                  <div className="score-fill" style={{ width: "75%" }}></div>
+                  <div className="score-fill" style={{ width: `${scoreBreakdown.skillsRelevance}%` }}></div>
                 </div>
-                <span className="score-text">75%</span>
+                <span className="score-text">{scoreBreakdown.skillsRelevance}%</span>
               </div>
             </div>
 
@@ -218,9 +273,9 @@ function Result() {
               </div>
               <div className="breakdown-score">
                 <div className="score-bar">
-                  <div className="score-fill" style={{ width: "80%" }}></div>
+                  <div className="score-fill" style={{ width: `${scoreBreakdown.experienceMatch}%` }}></div>
                 </div>
-                <span className="score-text">80%</span>
+                <span className="score-text">{scoreBreakdown.experienceMatch}%</span>
               </div>
             </div>
           </div>

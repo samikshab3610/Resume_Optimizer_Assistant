@@ -35,6 +35,24 @@ const resumeAnalysisSchema = new mongoose.Schema(
       min: 0,
       max: 100,
     },
+    scoreBreakdown: {
+      keywordsMatch: {
+        type: Number,
+        default: 0,
+      },
+      formatQuality: {
+        type: Number,
+        default: 0,
+      },
+      skillsRelevance: {
+        type: Number,
+        default: 0,
+      },
+      experienceMatch: {
+        type: Number,
+        default: 0,
+      },
+    },
     missingKeywords: {
       type: [String],
       default: [],
