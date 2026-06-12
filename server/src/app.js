@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/resumes", resumeRoutes);
+app.use("/api/contact", contactRoutes);
 
 
 app.get("/api/health", (req, res) => {

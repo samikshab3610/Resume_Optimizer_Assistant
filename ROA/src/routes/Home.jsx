@@ -1,6 +1,48 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { sendContactMessage } from "../api/contactApi";
 
 function Home() {
+  const [contactForm, setContactForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [contactStatus, setContactStatus] = useState("");
+  const [contactError, setContactError] = useState("");
+  const [isSending, setIsSending] = useState(false);
+
+  const updateContactField = (event) => {
+    const { name, value } = event.target;
+    setContactForm((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  };
+
+  const handleContactSubmit = async (event) => {
+    event.preventDefault();
+    setContactStatus("");
+    setContactError("");
+    setIsSending(true);
+
+    try {
+      const data = await sendContactMessage(contactForm);
+      setContactStatus(data.message);
+      setContactForm({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+    } catch (error) {
+      setContactError(error.response?.data?.message || "Unable to send message right now.");
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   return (
     <main>
       <section className="hero">
@@ -19,12 +61,6 @@ function Home() {
               <i className="fas fa-upload"></i>
               Optimize Resume
             </Link>
-          </div>
-        </div>
-
-        <div className="hero-visual">
-          <div className="resume-mockup">
-            <i className="fas fa-file-alt"></i>
           </div>
         </div>
       </section>
@@ -80,6 +116,93 @@ function Home() {
           <Link to="/upload" className="btn btn-primary">
             Get Started
           </Link>
+        </div>
+      </section>
+
+
+      <section className="contact-section" id="contact">
+        <div className="container">
+          <div className="contact-layout">
+            <div className="contact-copy">
+              <h2>Contact Us</h2>
+              <p>
+                Have feedback, questions, or an issue with resume analysis? Send us a message and
+                we will review it.
+              </p>
+              <div className="contact-detail">
+                <i className="fas fa-envelope"></i>
+                <span>Support for resume optimization and account questions</span>
+              </div>
+            </div>
+
+            <form className="contact-form" onSubmit={handleContactSubmit}>
+              {contactStatus && <p className="form-success">{contactStatus}</p>}
+              {contactError && <p className="form-error">{contactError}</p>}
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="contactName">Name</label>
+                  <input
+                    id="contactName"
+                    name="name"
+                    type="text"
+                    className="form-control"
+                    placeholder="Your name"
+                    value={contactForm.name}
+                    onChange={updateContactField}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="contactEmail">Email</label>
+                  <input
+                    id="contactEmail"
+                    name="email"
+                    type="email"
+                    className="form-control"
+                    placeholder="you@example.com"
+                    value={contactForm.email}
+                    onChange={updateContactField}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="contactSubject">Subject</label>
+                <input
+                  id="contactSubject"
+                  name="subject"
+                  type="text"
+                  className="form-control"
+                  placeholder="How can we help?"
+                  value={contactForm.subject}
+                  onChange={updateContactField}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="contactMessage">Message</label>
+                <textarea
+                  id="contactMessage"
+                  name="message"
+                  className="form-control"
+                  rows="5"
+                  placeholder="Write your message..."
+                  value={contactForm.message}
+                  onChange={updateContactField}
+                  required
+                ></textarea>
+              </div>
+
+              <button type="submit" className="btn btn-primary" disabled={isSending}>
+                <i className="fas fa-paper-plane"></i>
+                {isSending ? "Sending..." : "Send Message"}
+              </button>
+            </form>
+          </div>
         </div>
       </section>
     </main>
