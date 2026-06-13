@@ -1,7 +1,7 @@
 const express = require("express");
 const protect = require("../middleware/authMiddleware");
 const upload = require("../middleware/uploadMiddleware");
-const { analyzeResume, getResumeHistory } = require("../controllers/resumeController");
+const { analyzeResume, getResumeHistory, clearResumeHistory } = require("../controllers/resumeController");
 
 const router = express.Router();
 
@@ -15,5 +15,6 @@ router.post("/analyze", protect, (req, res, next) => {
   });
 }, analyzeResume);
 router.get("/history", protect, getResumeHistory);
+router.delete("/history", protect, clearResumeHistory);
 
 module.exports = router;

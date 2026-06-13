@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getResumeHistory } from "../api/resumeApi";
+import { clearResumeHistory as clearResumeHistoryApi, getResumeHistory } from "../api/resumeApi";
 
 function Dashboard() {
 
@@ -61,9 +61,14 @@ function Dashboard() {
     alert("Export logic will be added later.");
   };
 
-  const clearResumeHistory = () => {
-    localStorage.removeItem("resumeHistory");
-    setResumeHistory([]);
+  const clearResumeHistory = async () => {
+    try {
+      await clearResumeHistoryApi();
+      localStorage.removeItem("resumeHistory");
+      setResumeHistory([]);
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to clear resume history.");
+    }
   };
 
   const clearQuizHistory = () => {

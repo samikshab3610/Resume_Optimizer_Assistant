@@ -35,3 +35,8 @@ export const deleteResumeAnalysis = async (analysisId) => {
   const response = await axiosInstance.delete(`/resumes/${analysisId}`);
   return response.data;
 };
+
+export const clearResumeHistory = async () => {
+  const response = await axiosInstance.delete("/resumes/history");
+  return response.data;
+};

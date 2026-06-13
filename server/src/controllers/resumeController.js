@@ -84,7 +84,18 @@ const getResumeHistory = async (req, res) => {
     }
 };
 
+const clearResumeHistory = async (req, res) => {
+    try {
+        await ResumeAnalysis.deleteMany({ user: req.user._id });
+
+        res.json({ message: "Resume history cleared" });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to clear resume history" });
+    }
+};
+
 module.exports = {
     analyzeResume,
     getResumeHistory,
+    clearResumeHistory,
 };
