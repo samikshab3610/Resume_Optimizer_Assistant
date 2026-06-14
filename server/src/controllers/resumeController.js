@@ -51,7 +51,10 @@ const analyzeResume = async (req, res) => {
     } catch (error) {
         console.error("Resume analysis failed:", error);
         res.status(500).json({
-            message: error.message || "Resume analysis failed",
+            message:
+                process.env.NODE_ENV === "production"
+                    ? "Resume analysis failed"
+                    : error.message || "Resume analysis failed",
         });
     }
 };
