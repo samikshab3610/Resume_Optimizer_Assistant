@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const sanitizeBody = require("./middleware/sanitizeMiddleware");
 const authRoutes = require("./routes/authRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
 const contactRoutes = require("./routes/contactRoutes");
@@ -19,6 +20,8 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(sanitizeBody);
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/resumes", resumeRoutes);
