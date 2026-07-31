@@ -197,6 +197,6 @@ DELETE /api/resumes/history
 POST   /api/contact
 ```
 
-## License
+## Author
 
-This project is for academic and portfolio use.
+SAMIKSHA BHORE
