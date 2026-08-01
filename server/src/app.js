@@ -1,10 +1,10 @@
 const express = require("express");
 const cors = require("cors");
-const sanitizeBody = require("./middleware/sanitizeMiddleware");
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
 const authRoutes = require("./routes/authRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
 const contactRoutes = require("./routes/contactRoutes");
-const helmet = require("helmet");
 
 const app = express();
 
@@ -13,6 +13,7 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
 ].filter(Boolean);
 
+app.use(helmet());
 app.use(
   cors({
     origin: allowedOrigins,
@@ -20,8 +21,7 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(sanitizeBody);
-app.use(helmet());
+app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/resumes", resumeRoutes);
@@ -51,6 +51,5 @@ app.use((err, req, res, next) => {
     message: err.message || "Something went wrong. Please try again.",
   });
 });
-
 
 module.exports = app;
