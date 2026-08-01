@@ -8,6 +8,13 @@ const createToken = (userId) => {
   });
 };
 
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+};
+
 const signup = async (req, res) => {
   try {
     const { firstName, lastName, email, password, confirmPassword } = req.body;
@@ -36,9 +43,9 @@ const signup = async (req, res) => {
     });
 
     const token = createToken(user._id);
+    res.cookie("token", token, cookieOptions);
 
     res.status(201).json({
-      token,
       user: {
         id: user._id,
         firstName: user.firstName,
@@ -72,9 +79,9 @@ const login = async (req, res) => {
     }
 
     const token = createToken(user._id);
+    res.cookie("token", token, cookieOptions);
 
     res.json({
-      token,
       user: {
         id: user._id,
         firstName: user.firstName,
@@ -85,6 +92,11 @@ const login = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Login failed" });
   }
+};
+
+const logout = (req, res) => {
+  res.clearCookie("token", cookieOptions);
+  res.json({ message: "Logged out" });
 };
 
 const getMe = async (req, res) => {
@@ -101,5 +113,6 @@ const getMe = async (req, res) => {
 module.exports = {
   signup,
   login,
+  logout,
   getMe,
 };
