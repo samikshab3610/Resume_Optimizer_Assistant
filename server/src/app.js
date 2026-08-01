@@ -4,7 +4,7 @@ const sanitizeBody = require("./middleware/sanitizeMiddleware");
 const authRoutes = require("./routes/authRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
 const contactRoutes = require("./routes/contactRoutes");
-
+const helmet = require("helmet");
 
 const app = express();
 
@@ -21,7 +21,7 @@ app.use(
 );
 app.use(express.json());
 app.use(sanitizeBody);
-
+app.use(helmet());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/resumes", resumeRoutes);
