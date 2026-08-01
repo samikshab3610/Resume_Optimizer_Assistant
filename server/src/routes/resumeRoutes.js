@@ -1,11 +1,12 @@
 const express = require("express");
 const protect = require("../middleware/authMiddleware");
 const upload = require("../middleware/uploadMiddleware");
+const { analyzeLimiter } = require("../middleware/rateLimitMiddleware");
 const { analyzeResume, getResumeHistory, clearResumeHistory } = require("../controllers/resumeController");
 
 const router = express.Router();
 
-router.post("/analyze", protect, (req, res, next) => {
+router.post("/analyze", protect, analyzeLimiter, (req, res, next) => {
   upload.single("resume")(req, res, (error) => {
     if (error) {
       return res.status(400).json({ message: error.message });
