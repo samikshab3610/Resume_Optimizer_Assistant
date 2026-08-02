@@ -26,6 +26,7 @@ function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (isSubmitting) return;
     setError("");
     setIsSubmitting(true);
 
