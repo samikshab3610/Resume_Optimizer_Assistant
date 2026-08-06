@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { clearAuthData, getUser } from "../utils/storage";
+import { getUser } from "../utils/storage";
+import { logoutUser } from "../api/authApi";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,11 +13,11 @@ function Navbar() {
   const navigate = useNavigate();
   const user = getUser();
 
-  const handleLogout = () => {
-    clearAuthData();
-    closeMenu();
-    navigate("/login");
-  };
+  const handleLogout = async () => {
+  await logoutUser();
+  closeMenu();
+  navigate("/login");
+};
 
   return (
     <nav className="navbar">

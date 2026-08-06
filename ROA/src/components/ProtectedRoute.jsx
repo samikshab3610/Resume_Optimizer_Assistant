@@ -1,13 +1,18 @@
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { getToken } from "../utils/storage";
+import { getCurrentUser } from "../api/authApi";
 
 function ProtectedRoute({ children }) {
-  const token = getToken();
+  const [status, setStatus] = useState("checking");
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
+  useEffect(() => {
+    getCurrentUser()
+      .then(() => setStatus("authed"))
+      .catch(() => setStatus("guest"));
+  }, []);
 
+  if (status === "checking") return null;
+  if (status === "guest") return <Navigate to="/login" replace />;
   return children;
 }
 

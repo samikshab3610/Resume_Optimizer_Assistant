@@ -1,5 +1,5 @@
 import axiosInstance from "./axiosInstance";
-import { clearAuthData } from "../utils/storage";
+import { clearUser } from "../utils/storage";
 
 export const signupUser = async (userData) => {
   const response = await axiosInstance.post("/auth/signup", userData);
@@ -17,5 +17,5 @@ export const getCurrentUser = async () => {
 };
 
 export const logoutUser = () => {
-  clearAuthData();
+  clearUser();
 };

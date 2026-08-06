@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser, signupUser } from "../api/authApi";
-import { getToken, saveAuthData } from "../utils/storage";
+import { getCurrentUser, loginUser, signupUser } from "../api/authApi";
+import { saveUser } from "../utils/storage";
 
 
 function Login() {
@@ -12,10 +12,10 @@ function Login() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (getToken()) {
-      navigate("/dashboard");
-    }
-  }, [navigate]);
+  getCurrentUser()
+    .then(() => navigate("/dashboard"))
+    .catch(() => {});
+}, [navigate]);
 
   const togglePassword = (fieldId) => {
     setVisiblePasswords((current) => ({
@@ -51,10 +51,7 @@ function Login() {
         });
       }
 
-      saveAuthData({
-        token: data.token,
-        user: data.user,
-      });
+      saveUser(data.user);
 
       navigate("/dashboard");
     } catch (err) {
