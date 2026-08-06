@@ -12,10 +12,10 @@ function Login() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-  getCurrentUser()
-    .then(() => navigate("/dashboard"))
-    .catch(() => {});
-}, [navigate]);
+    getCurrentUser()
+      .then(() => navigate("/"))
+      .catch(() => {});
+  }, [navigate]);
 
   const togglePassword = (fieldId) => {
     setVisiblePasswords((current) => ({
@@ -52,8 +52,8 @@ function Login() {
       }
 
       saveUser(data.user);
+      navigate("/");
 
-      navigate("/dashboard");
     } catch (err) {
       setError(
         err.response?.data?.message ||
